@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Feliz Cumpleaños!</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 90%;
+            display: none; /* Se oculta al inicio */
+        }
+        img {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        h1 { color: #d63384; }
+        p { color: #555; line-height: 1.6; }
+
+        /* Pantalla de inicio */
+        #overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            cursor: pointer;
+        }
+        .btn-play {
+            font-size: 50px;
+            background: #7620d8;
+            border: none;
+            border-radius: 50%;
+            width: 80px; height: 80px;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Pantalla de entrada -->
+    <div id="overlay" onclick="iniciarSorpresa()">
+        <button class="btn-play">▶</button>
+        <!--<p>Toca para ver tu sorpresa</p> -->
+    </div>
+
+    <!-- Contenido de la web -->
+    <div class="container" id="contenido">
+        <img src="foto.jpg" alt="Foto especial">
+        <h1>¡Feliz vuelta al sol! ☀️</h1>
+        <p>Ya llevamos un tiempo conociéndonos... y en ese tiempo pasaron muchas cosas: buenas, malas, incluso algunas medio caóticas. Pero si me preguntas, yo me quedo con lo bueno... siempre.</p>
+        <p>Desde la primera vez que nos vimos hasta hoy, todo fue dándose sin filtro, bien a nuestra manera.</p> <p>Hay algo que una vez escuché en una peli que me hace sentido contigo:
+            tus locuras combinan con las mías. </p> 
+        <p>En un mundo que a veces te quiere ver caer, lo importante es seguir de pie… y sé que lo vas a entender cada vez más con el tiempo.</p> 
+        <p>Sin darme cuenta, llegaste a formar parte de mi vida… de esas personas que no estaban en el plan, pero se quedan. </p>
+        <P>Espero que te guste este pequeño detalle. Me faltó un parche de Oasis para tu mochila (lo juro, lo busqué 😅), pero con fe lo consigo después.
+            Feliz cumpleaños, Nayu 🎂</P>
+        <P>Te quiero mucho.</P>
+        <p>Y no lo olvides: siempre estoy a una llamada o un WhatsApp de distancia 𓆰𓆪</p>
+
+
+    </div>
+
+    <audio id="miMusica" src="musica.mp3" loop></audio>
+
+    <script>
+        function iniciarSorpresa() {
+            // Reproducir música
+            document.getElementById('miMusica').play();
+            // Ocultar pantalla de entrada
+            document.getElementById('overlay').style.display = 'none';
+            // Mostrar contenido
+            document.getElementById('contenido').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
