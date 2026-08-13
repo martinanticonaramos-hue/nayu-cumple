@@ -8,7 +8,51 @@
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; text-align: center; }
         .container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 420px; width: 90%; display: none; text-align: left; }
         p { color: #444; line-height: 1.6; font-size: 1rem; margin-bottom: 15px; }
-        img { width: 100%; border-radius: 10px; margin-top: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        img { width: 100%; border-radius: 10px; margin-top: 20px; margin-bottom: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+
+        /* Estilo tipo tarjeta para el contador */
+        .contador-titulo {
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        .reloj-container {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 25px;
+        }
+        .tarjeta-tiempo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .caja-numero {
+            background-color: #3b3a5c;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding: 10px 12px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            min-width: 35px;
+            text-align: center;
+            letter-spacing: 1px;
+            border-bottom: 2px solid #222138;
+        }
+        .etiqueta-tiempo {
+            font-size: 0.65rem;
+            color: #777;
+            text-transform: uppercase;
+            margin-top: 5px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
         #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); color: white; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; cursor: pointer; }
         .btn-play { font-size: 40px; background: #7620d8; border: none; border-radius: 50%; width: 80px; height: 80px; color: white; cursor: pointer; margin-bottom: 15px; transition: transform 0.2s; }
         .btn-play:hover { transform: scale(1.1); }
@@ -26,7 +70,7 @@
         
         <p>No sé cuándo veas esto o si en realidad lo viste, pero dejaré la página activa hasta fin de año creo; fácil y me olvido, pero nee, ahí estará.</p>
         
-        <p>Bueno, lo único que quería decirte es, digamos, mi último consejo: <strong>VIVE UNA VIDA QUE QUIERAS RECORDAR Y NO DEJES QUE TE IMPONGAN LA VIDA QUE NO PUDIERON VIVIR O REALIZAR</strong>, por errores, problemas o situaciones que no supieron manejar. Al final somos lo que elegimos ser y nuestras decisiones y acciones hablarán por nosotros. Tómalo como gustes.</p>
+        <p>Bueno, lo único que quería decirte es, digamos, mi último consejo: <strong>VIVE UNA VIDA YANG QUIERAS RECORDAR Y NO DEJES QUE TE IMPONGAN LA VIDA QUE NO PUDIERON VIVIR O REALIZAR</strong>, por errores, problemas o situaciones que no supieron manejar. Al final somos lo que elegimos ser y nuestras decisiones y acciones hablarán por nosotros. Tómalo como gustes.</p>
         
         <p>Perdón por la huida, pero sabía que si dejaba alguna ventana, caería otra vez. Cuídate, eres fuerte física y mentalmente. Solo te ayudé a llevar las cosas un rato, ahora toca el 1 vs 1. Y siempre hay que levantarse por muy mala que sea la situación.</p>
         
@@ -40,7 +84,29 @@
         
         <p style="text-align: center; font-weight: bold; margin-top: 15px;">BYE, TE QUIERO MUCHO NAYU.</p>
 
+        <!-- Imagen ubicada antes del contador -->
         <img src="foto.jpg" alt="Foto especial">
+
+        <!-- Nuevo Contador estilo tarjetas digitales -->
+        <div class="contador-titulo">Tiempo restante de la página</div>
+        <div class="reloj-container">
+            <div class="tarjeta-tiempo">
+                <div class="caja-numero" id="dias">00</div>
+                <div class="etiqueta-tiempo">Días</div>
+            </div>
+            <div class="tarjeta-tiempo">
+                <div class="caja-numero" id="horas">00</div>
+                <div class="etiqueta-tiempo">Horas</div>
+            </div>
+            <div class="tarjeta-tiempo">
+                <div class="caja-numero" id="minutos">00</div>
+                <div class="etiqueta-tiempo">Min</div>
+            </div>
+            <div class="tarjeta-tiempo">
+                <div class="caja-numero" id="segundos">00</div>
+                <div class="etiqueta-tiempo">Seg</div>
+            </div>
+        </div>
     </div>
 
     <audio id="miMusica" src="musica.mp3" loop></audio>
@@ -50,6 +116,35 @@
             document.getElementById('miMusica').play();
             document.getElementById('overlay').style.display = 'none';
             document.getElementById('contenido').style.display = 'block';
+            iniciarContador();
+        }
+
+        function iniciarContador() {
+            const fechaLimite = new Date("Dec 31, 2026 23:59:59").getTime();
+
+            const x = setInterval(function() {
+                const ahora = new Date().getTime();
+                const distancia = fechaLimite - ahora;
+
+                const dias = Math.floor(distancia / (1000 * 60 * 60 * 24));
+                const horas = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutos = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
+                const segundos = Math.floor((distancia % (1000 * 60)) / 1000);
+
+                if (distancia < 0) {
+                    clearInterval(x);
+                    document.getElementById("dias").innerHTML = "00";
+                    document.getElementById("horas").innerHTML = "00";
+                    document.getElementById("minutos").innerHTML = "00";
+                    document.getElementById("segundos").innerHTML = "00";
+                } else {
+                    // Agrega un cero adelante si el número es menor a 10
+                    document.getElementById("dias").innerHTML = String(dias).padStart(2, '0');
+                    document.getElementById("horas").innerHTML = String(horas).padStart(2, '0');
+                    document.getElementById("minutos").innerHTML = String(minutos).padStart(2, '0');
+                    document.getElementById("segundos").innerHTML = String(segundos).padStart(2, '0');
+                }
+            }, 1000);
         }
     </script>
 </body>
