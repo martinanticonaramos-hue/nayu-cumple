@@ -5,66 +5,133 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Para Nayu</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; text-align: center; }
-        .container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 420px; width: 90%; display: none; text-align: left; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            background-color: #f0f2f5; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            text-align: center; 
+        }
+        .container { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 15px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+            max-width: 420px; 
+            width: 90%; 
+            display: block; 
+            text-align: left; 
+            position: relative;
+        }
         p { color: #444; line-height: 1.6; font-size: 1rem; margin-bottom: 15px; }
         img { width: 100%; border-radius: 10px; margin-top: 20px; margin-bottom: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
-        /* Estilo tipo tarjeta para el contador */
-        .contador-titulo {
-            text-align: center;
-            font-size: 0.85rem;
-            font-weight: bold;
-            color: #666;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-            letter-spacing: 1px;
+        /* Estilo del contador en bloques */
+        .contador-titulo { text-align: center; font-size: 0.85rem; font-weight: bold; color: #666; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 1px; }
+        .reloj-container { display: flex; justify-content: center; gap: 8px; margin-bottom: 25px; }
+        .tarjeta-tiempo { display: flex; flex-direction: column; align-items: center; }
+        .caja-numero { background-color: #3b3a5c; color: white; font-size: 1.5rem; font-weight: bold; padding: 10px 12px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); min-width: 35px; text-align: center; letter-spacing: 1px; border-bottom: 2px solid #222138; }
+        .etiqueta-tiempo { font-size: 0.65rem; color: #777; text-transform: uppercase; margin-top: 5px; font-weight: bold; letter-spacing: 0.5px; }
+
+        /* Pantalla inicial de Play */
+        #overlay { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: #000000; 
+            color: white; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            z-index: 1000; 
+            cursor: pointer; 
         }
-        .reloj-container {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 25px;
+        .btn-play { 
+            font-size: 40px; 
+            background: #7620d8; 
+            border: none; 
+            border-radius: 50%; 
+            width: 80px; 
+            height: 80px; 
+            color: white; 
+            cursor: pointer; 
+            margin-bottom: 15px; 
+            transition: transform 0.2s; 
         }
-        .tarjeta-tiempo {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .caja-numero {
-            background-color: #3b3a5c;
-            color: white;
-            font-size: 1.5rem;
-            font-weight: bold;
-            padding: 10px 12px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            min-width: 35px;
-            text-align: center;
-            letter-spacing: 1px;
-            border-bottom: 2px solid #222138;
-        }
-        .etiqueta-tiempo {
-            font-size: 0.65rem;
-            color: #777;
-            text-transform: uppercase;
-            margin-top: 5px;
-            font-weight: bold;
-            letter-spacing: 0.5px;
+        .btn-play:hover { transform: scale(1.1); }
+
+        /* ESTILOS BASE DE LOS ÍCONOS (Celular en Vertical) */
+        .icono-esquina {
+            position: fixed;
+            z-index: 100;
+            margin: 0 !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            pointer-events: none;
+            max-height: 110px;
+            width: auto;
         }
 
-        #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); color: white; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; cursor: pointer; }
-        .btn-play { font-size: 40px; background: #7620d8; border: none; border-radius: 50%; width: 80px; height: 80px; color: white; cursor: pointer; margin-bottom: 15px; transition: transform 0.2s; }
-        .btn-play:hover { transform: scale(1.1); }
+        .esquina-top-left { top: 20px; left: 15px; }
+        .esquina-top-right { top: 20px; right: 15px; }
+        .esquina-bottom-left { bottom: 20px; left: 15px; }
+        .esquina-bottom-right { bottom: 20px; right: 15px; }
+
+        .logo-oasis {
+            max-height: 60px;
+            top: 30px;
+        }
+
+        .logo-panter {
+            max-height: 150px; 
+            width: auto;
+        }
+
+        .logo-moon {
+            max-height: 140px;
+            width: auto;
+        }
+
+        /* Ajuste para Tablet y PC (Pantallas Grandes) */
+        @media (min-width: 768px) {
+            .icono-esquina {
+                max-height: 160px;
+            }
+            .esquina-top-left { top: 35px; left: 35px; }
+            .esquina-top-right { top: 35px; right: 35px; }
+            .esquina-bottom-left { bottom: 35px; left: 35px; }
+            .esquina-bottom-right { bottom: 35px; right: 35px; }
+
+            .logo-oasis {
+                max-height: 100px;
+                top: 55px;
+            }
+
+            .logo-panter {
+                max-height: 200px;
+            }
+
+            .logo-moon {
+                max-height: 190px;
+            }
+        }
     </style>
 </head>
 <body>
 
+    <!-- Overlay de inicio para reproducir música -->
     <div id="overlay" onclick="iniciarSorpresa()">
         <button class="btn-play">▶</button>
-        <p>SÚBELE AL VOLUMEN</p>
+        <p style="color: white; font-weight: 500;">SÚBELE AL VOLUMEN</p>
     </div>
 
+    <!-- Contenido Principal -->
     <div class="container" id="contenido">
         <p>Esta vez sin cabos sueltos. No sé si aún abra el QR cuando haya hecho esta modificación en el código, esperemos que sí. No hago esto porque me estresaba mucho (hablo de programar), pero recuerdo que me dijiste que nunca recibiste un regalo original y pues hice esto para ti, por tu cumple. Creo que volveré a hacer esto de programar</p>
         
@@ -94,43 +161,41 @@
         
         <p style="text-align: center; font-weight: bold; margin-top: 15px;">BYE, TE QUIERO MUCHO NAYU.</p>
 
-        <!-- Imagen ubicada antes del contador -->
+        <!-- Foto principal -->
         <img src="foto.jpg" alt="Foto especial">
 
-        <!-- Nuevo Contador estilo tarjetas digitales -->
+        <!-- Contador final estilo tarjeta -->
         <div class="contador-titulo">Tiempo restante de la página</div>
         <div class="reloj-container">
-            <div class="tarjeta-tiempo">
-                <div class="caja-numero" id="dias">00</div>
-                <div class="etiqueta-tiempo">Días</div>
-            </div>
-            <div class="tarjeta-tiempo">
-                <div class="caja-numero" id="horas">00</div>
-                <div class="etiqueta-tiempo">Horas</div>
-            </div>
-            <div class="tarjeta-tiempo">
-                <div class="caja-numero" id="minutos">00</div>
-                <div class="etiqueta-tiempo">Min</div>
-            </div>
-            <div class="tarjeta-tiempo">
-                <div class="caja-numero" id="segundos">00</div>
-                <div class="etiqueta-tiempo">Seg</div>
-            </div>
+            <div class="tarjeta-tiempo"><div class="caja-numero" id="dias">00</div><div class="etiqueta-tiempo">Días</div></div>
+            <div class="tarjeta-tiempo"><div class="caja-numero" id="horas">00</div><div class="etiqueta-tiempo">Horas</div></div>
+            <div class="tarjeta-tiempo"><div class="caja-numero" id="minutos">00</div><div class="etiqueta-tiempo">Min</div></div>
+            <div class="tarjeta-tiempo"><div class="caja-numero" id="segundos">00</div><div class="etiqueta-tiempo">Seg</div></div>
         </div>
     </div>
 
-    <audio id="miMusica" src="musica.mp3" loop></audio>
+    <!-- Archivos de Audio -->
+    <audio id="musicaOjala" src="musica.mp3" loop preload="auto"></audio>
+    <audio id="musicaOmar" src="en odio.mp3" loop preload="auto"></audio>
 
     <script>
+        const audio1 = document.getElementById('musicaOjala');
+        const audio2 = document.getElementById('musicaOmar');
+
         function iniciarSorpresa() {
-            document.getElementById('miMusica').play();
+            audio2.play().then(() => {
+                audio2.pause();
+                audio2.currentTime = 0;
+            }).catch(e => console.log("Permiso audio 2:", e));
+
+            audio1.play();
             document.getElementById('overlay').style.display = 'none';
-            document.getElementById('contenido').style.display = 'block';
             iniciarContador();
         }
 
         function iniciarContador() {
-            const fechaLimite = new Date("Dec 31, 2026 23:59:59").getTime();
+            /* FECHA LÍMITE ACTUALIZADA AL 1 DE ENERO DE 2027 A LAS 00:00 */
+            const fechaLimite = new Date("Jan 1, 2027 00:00:00").getTime();
 
             const x = setInterval(function() {
                 const ahora = new Date().getTime();
@@ -143,12 +208,95 @@
 
                 if (distancia < 0) {
                     clearInterval(x);
-                    document.getElementById("dias").innerHTML = "00";
-                    document.getElementById("horas").innerHTML = "00";
-                    document.getElementById("minutos").innerHTML = "00";
-                    document.getElementById("segundos").innerHTML = "00";
+                    
+                    audio1.pause();
+                    audio2.play();
+
+                    /* APLICACIÓN DEL FONDO SIN BORDES VISIBLES Y MEJOR INTEGRADO */
+                    document.body.style.backgroundColor = "#000000"; 
+                    document.body.style.backgroundImage = "linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url('ameri.jpg')";
+                    document.body.style.backgroundSize = "contain"; 
+                    document.body.style.backgroundRepeat = "no-repeat";
+                    document.body.style.backgroundPosition = "center center";
+                    document.body.style.backgroundAttachment = "fixed";
+
+                    /* Blend mode para eliminar cualquier diferencia de color de fondo en la imagen */
+                    document.body.style.backgroundBlendMode = "screen";
+
+                    const contenido = document.getElementById('contenido');
+                    contenido.style.maxWidth = "100%";
+                    contenido.style.width = "100%";
+                    contenido.style.background = "transparent";
+                    contenido.style.boxShadow = "none";
+                    contenido.style.padding = "0";
+
+                    contenido.innerHTML = `
+                        <!-- 1. ESQUINA SUPERIOR IZQUIERDA (Spider-Gwen) -->
+                        <img src="spider2.png" class="icono-esquina esquina-top-left" style="filter: drop-shadow(0 0 12px rgba(255, 20, 147, 0.7));">
+
+                        <!-- 2. ESQUINA SUPERIOR DERECHA (Oasis) -->
+                        <img src="oasis.png" alt="Oasis" class="icono-esquina esquina-top-right logo-oasis">
+
+                        <!-- 3. ESQUINA INFERIOR IZQUIERDA (Moon Knight) -->
+                        <img src="moon_knight.png" alt="Moon Knight" class="icono-esquina esquina-bottom-left logo-moon" style="filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.6));">
+
+                        <!-- 4. ESQUINA INFERIOR DERECHA (Black Panther) -->
+                        <img src="panter.png" alt="Black Panther" class="icono-esquina esquina-bottom-right logo-panter" style="filter: drop-shadow(0 0 12px rgba(138, 43, 226, 0.7));">
+
+                        <!-- CONTENIDO CENTRAL -->
+                        <div style="
+                            color: #ffffff; 
+                            display: flex; 
+                            justify-content: center; 
+                            align-items: center; 
+                            flex-direction: column; 
+                            min-height: 100vh;
+                            box-sizing: border-box;
+                            padding: 20px;">
+                            
+                            <div style="max-width: 500px; width: 85%;">
+                                <div style="font-size: 2.8rem; margin-bottom: 15px; text-align: center;">⏳</div>
+                                
+                                <h2 style="font-size: 1.4rem; font-weight: 600; letter-spacing: 1px; color: #ffffff; margin-bottom: 25px; text-align: center;">
+                                    ESTA PÁGINA HA CADUCADO
+                                </h2>
+                                
+                                <p style="color: #ffffff; font-size: 0.95rem; line-height: 1.7; margin-bottom: 25px; font-weight: bold; text-align: center;">
+                                    VIVE UNA VIDA QUE QUIERAS RECORDAR Y NO DEJES QUE TE IMPONGAN LA VIDA QUE NO PUDIERON VIVIR O REALIZAR. Al final somos lo que elegimos ser y nuestras decisiones y acciones hablarán por nosotros.
+                                </p>
+
+                                <p style="color: #aaaaaa; font-size: 0.95rem; line-height: 1.7; margin-bottom: 25px; text-align: center;">
+                                    Eres grandiosa, siempre apostaré por ti, solo debes creerlo tú también.
+                                </p>
+
+                                <!-- FILA ALINEADA: SPOTIFY A LA IZQUIERDA E INICIALES A LA DERECHA -->
+                                <div style="
+                                    display: flex; 
+                                    justify-content: space-between; 
+                                    align-items: center; 
+                                    margin-top: 20px; 
+                                    width: 100%;">
+                                    
+                                    <img src="Spotify.jpg" alt="Spotify Code" style="
+                                        height: 38px; 
+                                        width: auto; 
+                                        border-radius: 6px; 
+                                        margin: 0; 
+                                        box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);">
+
+                                    <p style="
+                                        color: #7620d8; 
+                                        font-size: 0.85rem; 
+                                        font-weight: bold; 
+                                        letter-spacing: 2px; 
+                                        margin: 0;">
+                                        V.M.R.A.R.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
                 } else {
-                    // Agrega un cero adelante si el número es menor a 10
                     document.getElementById("dias").innerHTML = String(dias).padStart(2, '0');
                     document.getElementById("horas").innerHTML = String(horas).padStart(2, '0');
                     document.getElementById("minutos").innerHTML = String(minutos).padStart(2, '0');
